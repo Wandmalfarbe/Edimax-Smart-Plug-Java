@@ -76,3 +76,9 @@ float[] history = smartPlug.getHistory(SmartPlug.TimeUnit.HOUR, LocalDateTime.no
     - [ ] send messages
     - [ ] receive messages
     - [ ] plug discovery (is this possible with cloud communication?)
+
+### Known Bugs
+
+1. [History] The history values are accumulated values per hour (only when requesting the history for a day).
+2. [Command Line] Not all methods from `SmartPlug` can be accessed via the command line.
+3. [Command Line] There is no command line help text.
