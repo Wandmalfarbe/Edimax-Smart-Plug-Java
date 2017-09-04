@@ -127,6 +127,12 @@ public class SmartPlug {
 
 		for(int x = 0; x < arr.length; x++) {
 			doubleArr[x] = decodeHistoryPart(arr[x]);
+			/*if(timeUnit == SmartPlug.TimeUnit.DAY && ) {
+				
+			}
+			if (this.mMeter_Type == meter_form_type.day && count % 24 != 0) {
+                _NewValue -= _pre_value;
+            }*/
 		}
 
 		return doubleArr;

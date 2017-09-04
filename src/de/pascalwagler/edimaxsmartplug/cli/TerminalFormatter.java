@@ -33,13 +33,9 @@ public class TerminalFormatter implements OutputFormatter{
 
 	@Override
 	public String getHistory(float[] history) {
-
-		StringBuilder sb = new StringBuilder();
 		
-		for(int x = 0; x < history.length; x++) {
-			sb.append("Value "+x+": "+history[x]+s);
-		}
-		return sb.toString();
+		ASCIIPlot plot = new ASCIIPlot(80);
+		return plot.plot(history);
 	}
 
 	@Override
