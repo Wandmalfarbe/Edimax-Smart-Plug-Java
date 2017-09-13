@@ -1,3 +1,5 @@
+<img src="icon.png" align="right" height="110"/>
+
 # EdimaxSmartPlugJava
 
 A Java library for controlling the Edimax Smart Plug SP-1101W.
@@ -82,3 +84,7 @@ float[] history = smartPlug.getHistory(SmartPlug.TimeUnit.HOUR, LocalDateTime.no
 1. [History] The history values are accumulated values per hour (only when requesting the history for a day).
 2. [Command Line] Not all methods from `SmartPlug` can be accessed via the command line.
 3. [Command Line] There is no command line help text.
+
+## License
+
+This project is open source licensed under the BSD 3-Clause License. Please see the [LICENSE file](LICENSE.md) for more information.
