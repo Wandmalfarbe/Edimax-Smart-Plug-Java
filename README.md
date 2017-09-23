@@ -35,23 +35,56 @@ float[] history = smartPlug.getHistory(SmartPlug.TimeUnit.HOUR, LocalDateTime.no
 ### Switching On and Off
 
 - [x] switch on and off
+    
+    ```java
+	smartPlug.switchOn();
+	smartPlug.switchOff();
+    ```
 - [x] get current state (on and off)
-- [x] toggle the current state
+    
+    ```java
+	State state = smartPlug.getState()
+    ```
+- [x] toggle the current state (sends two requests)
+
+    ```java
+	smartPlug.toggle()
+    ```
 
 ### History
 
 - [ ] get the history (partially)
 
+    ```java
+    float[] history = smartPlug.getHistory(SmartPlug.TimeUnit.HOUR, LocalDateTime.now().minusHours(3), LocalDateTime.now().plusHours(1));
+    ```
+
 ### Schedule
 
 - [x] get the schedule
+
+    ```java
+    ScheduleDay[] schedule = smartPlug.getSchedule();
+    ```
 - [ ] change the schedule
 
 ### System and Power Information
 
 - [x] get the power information
+    
+    ```java
+    PowerInformation powInfo = smartPlug.getPowerInformation();
+    ```
 - [x] get the system information (including the name)
+
+    ```java
+    SystemInformation sysInfo = getSystemInformation();
+    ```
 - [x] change the plug name
+    
+    ```java
+    smartPlug.setName("My Smart Plug");
+    ```
 
 ### Budget Control
 

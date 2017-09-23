@@ -25,7 +25,7 @@ public class MainTest {
 			System.out.println(historyStr);*/
 			
 			smartPlug.setName("Testname");
-			SystemInformation info = smartPlug.getSystemInfo();
+			SystemInformation info = smartPlug.getSystemInformation();
 			System.out.println(info);
 			
 		} catch (Exception e) {

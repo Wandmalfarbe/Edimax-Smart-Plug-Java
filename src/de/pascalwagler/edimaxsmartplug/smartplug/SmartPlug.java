@@ -95,7 +95,7 @@ public class SmartPlug {
 		return response;
 	}
 
-	public SystemInformation getSystemInfo() throws Exception {
+	public SystemInformation getSystemInformation() throws Exception {
 
 		String xml = RequestTemplates.getGetSystemInfo();
 		String response = this.connection.sendCommand(xml);
