@@ -1,115 +1,122 @@
 package de.pascalwagler.edimaxsmartplug.smartplug;
 
-import java.io.IOException;
-
-import javax.xml.ws.http.HTTPException;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.StatusLine;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.MIME;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Base64;
+import java.util.Scanner;
 
 import de.pascalwagler.edimaxsmartplug.entities.PlugCredentials;
-
-import java.util.Base64;
 
 public class LocalConnection implements PlugConnection {
 
 	private PlugCredentials credentials;
-	private String url;
+	private URL url;
 
 	private String urlTemplate = "http://%s:10000/smartplug.cgi";
-	private CloseableHttpClient httpClient;
 	
-	public LocalConnection(PlugCredentials credentials, String ip) {
+	public LocalConnection(PlugCredentials credentials, String ip) throws MalformedURLException {
 
 		this.credentials = credentials;
-		this.url = String.format(urlTemplate, ip);
+		this.url = new URL(String.format(urlTemplate, ip));
 	}
 	
 	@Override
+	/**
+	 * Does nothing because when communicating on local network 
+	 * there's no connection to the cloud service.
+	 */
 	public void connect() {
 		
-		RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(5 * 1000).setConnectionRequestTimeout(5 * 1000).build();
-		httpClient = HttpClientBuilder.create().setDefaultRequestConfig(requestConfig).build();
 	}
 	
 	@Override
+	/**
+	 * Always returns true because when communicating on local network 
+	 * there's no connection to the cloud service.
+	 */
 	public boolean isConnected() {
-		return httpClient != null;
+		return false;
 	}
 
 	@Override
-	public String sendCommand(String xml) throws IOException, ClientProtocolException, HTTPException{
+	public String sendCommand(String xml) throws Exception{
 
 		if(!this.isConnected()) {
 			this.connect();
 		}
 		
-		CloseableHttpResponse response = null;
+		InputStream input = null;
+		Scanner scanner = null;
+		BufferedWriter writer = null;
+		BufferedOutputStream output = null;
 		
 		try {
 			/*
 			 * Request
 			 */
 			
-			byte[] auth = Base64.getEncoder().encode( (credentials.getUsername() + ":" + credentials.getPassword()).getBytes() );
-			String httpAuth = new String(auth);
-
-			HttpPost httpPostRequest = new HttpPost(this.url);
-			httpPostRequest.setHeader("Authorization", "Basic " + httpAuth);
-			httpPostRequest.setHeader("Connection", "close");
-
-			MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-			builder.addTextBody("xml", xml, ContentType.create("text/xml", MIME.UTF8_CHARSET));
-
-			HttpEntity multipartEntity = builder.build();
-			httpPostRequest.setEntity(multipartEntity);
-
-			response = httpClient.execute(httpPostRequest);
+			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            
+            byte[] auth = Base64.getEncoder().encode( (credentials.getUsername() + ":" + credentials.getPassword()).getBytes() );
+			String basicAuthValue = new String(auth);
 			
+			urlConnection.setDoOutput(true);
+			urlConnection.setRequestMethod("POST");
+			urlConnection.setRequestProperty("Authorization", "Basic " + basicAuthValue);
+			urlConnection.setRequestProperty("Connection", "close");
+			
+            output = new BufferedOutputStream(urlConnection.getOutputStream());
+            writer = new BufferedWriter(new OutputStreamWriter(output, "UTF-8"));            		
+            writer.write(xml);
+            
+            writer.flush();
+            writer.close();
+            output.close();
+
+            urlConnection.connect();
+            
 			/*
 			 * Response
 			 */
-			StatusLine statusLine = response.getStatusLine();
+			int statusCode = urlConnection.getResponseCode();
 			
-			if(statusLine.getStatusCode() == 401) {
-				
+			if(statusCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
 				// The credentials are wrong => the user is not authorized
-				throw new HTTPException(statusLine.getStatusCode());
+				throw new Exception("Unauthorized: The supplied plug credentials are wrong.");
 				
-			} else if(statusLine.getStatusCode() != 200) {
-				
-				// We got any other HTTP status code except 200
-				throw new HTTPException(statusLine.getStatusCode());
+			} else if(statusCode != HttpURLConnection.HTTP_OK) {
+				// Something else went wrong
+				throw new Exception("Unknown error: The server responded with a status code that is not 200 OK.");
 			}
+			
+			input = urlConnection.getInputStream();
+			scanner = new Scanner(input);
+			Scanner s = scanner.useDelimiter("\\A");
+			String result = s.hasNext() ? s.next() : "";
+			scanner.close();
+			input.close();
 
-			HttpEntity responseEntity = response.getEntity();
-			String responseText = EntityUtils.toString(responseEntity, "UTF-8");
-
-			return responseText;
+			return result;
 			
 		} finally {
-			if (response != null) response.close();
+			if(input != null) input.close();
+			if(scanner != null) scanner.close();
+			if(writer != null) writer.close();
+			if(output != null) output.close();
 		}
 	}
 	
 	@Override
+	/**
+	 * Unimplemented because when communicating on local network 
+	 * there's no connection to the cloud service.
+	 */
 	public void disconnect() {
-		try {
-			httpClient.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			httpClient = null;
-		}
+		
 	}
 }
