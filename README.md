@@ -2,7 +2,7 @@
 
 # EdimaxSmartPlugJava
 
-A Java library for controlling the Edimax Smart Plug SP-1101W.
+A Java library for controlling the Edimax Smart Plug SP-1101W and SP-2101W.
 
 ## Usage
 
