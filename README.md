@@ -10,7 +10,7 @@ Create a SmartPlug object to control your plug.
 
 ```java
 PlugCredentials credentials = new PlugCredentials("admin","1234");
-PlugConnection connection = new LocalConnection(credentials,"192.168.178.34");
+PlugConnection connection = new LocalHTTPConnection(credentials,"192.168.178.34");
 SmartPlug smartPlug = new SmartPlug(connection);
 ```
 
