@@ -12,14 +12,14 @@ import java.util.Scanner;
 
 import de.pascalwagler.edimaxsmartplug.entities.PlugCredentials;
 
-public class LocalConnection implements PlugConnection {
+public class LocalHTTPConnection implements PlugConnection {
 
 	private PlugCredentials credentials;
 	private URL url;
 
 	private String urlTemplate = "http://%s:10000/smartplug.cgi";
 	
-	public LocalConnection(PlugCredentials credentials, String ip) throws MalformedURLException {
+	public LocalHTTPConnection(PlugCredentials credentials, String ip) throws MalformedURLException {
 
 		this.credentials = credentials;
 		this.url = new URL(String.format(urlTemplate, ip));
@@ -44,7 +44,7 @@ public class LocalConnection implements PlugConnection {
 	}
 
 	@Override
-	public String sendCommand(String xml) throws Exception{
+	public String sendCommand(String xml) throws Exception {
 
 		if(!this.isConnected()) {
 			this.connect();

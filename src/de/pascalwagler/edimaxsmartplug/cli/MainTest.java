@@ -5,7 +5,8 @@ import java.time.LocalDateTime;
 
 import de.pascalwagler.edimaxsmartplug.entities.PlugCredentials;
 import de.pascalwagler.edimaxsmartplug.entities.SystemInformation;
-import de.pascalwagler.edimaxsmartplug.smartplug.LocalConnection;
+import de.pascalwagler.edimaxsmartplug.smartplug.LocalHTTPConnection;
+import de.pascalwagler.edimaxsmartplug.smartplug.LocalSocketConnection;
 import de.pascalwagler.edimaxsmartplug.smartplug.PlugConnection;
 import de.pascalwagler.edimaxsmartplug.smartplug.SmartPlug;
 
@@ -14,7 +15,7 @@ public class MainTest {
 	public static void main(String[] args) throws MalformedURLException {
 
 		PlugCredentials credentials = new PlugCredentials("admin", "1234");
-		PlugConnection connection = new LocalConnection(credentials, "192.168.178.34");
+		PlugConnection connection = new LocalHTTPConnection(credentials, "192.168.178.34");
 		SmartPlug smartPlug = new SmartPlug(connection);
 
 		try {

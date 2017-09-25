@@ -13,7 +13,7 @@ import org.apache.commons.cli.ParseException;
 import de.pascalwagler.edimaxsmartplug.entities.PlugCredentials;
 import de.pascalwagler.edimaxsmartplug.entities.PowerInformation;
 import de.pascalwagler.edimaxsmartplug.entities.ScheduleDay;
-import de.pascalwagler.edimaxsmartplug.smartplug.LocalConnection;
+import de.pascalwagler.edimaxsmartplug.smartplug.LocalHTTPConnection;
 import de.pascalwagler.edimaxsmartplug.smartplug.PlugConnection;
 import de.pascalwagler.edimaxsmartplug.smartplug.SmartPlug;
 import de.pascalwagler.edimaxsmartplug.smartplug.SmartPlug.State;
@@ -149,7 +149,7 @@ public class EdimaxSmartPlugCLI {
 		String password = line.getOptionValue("password", "1234");
 
 		PlugCredentials credentials = new PlugCredentials(username, password);
-		PlugConnection connection = new LocalConnection(credentials, ip);
+		PlugConnection connection = new LocalHTTPConnection(credentials, ip);
 		SmartPlug smartPlug = new SmartPlug(connection);
 
 		// help
