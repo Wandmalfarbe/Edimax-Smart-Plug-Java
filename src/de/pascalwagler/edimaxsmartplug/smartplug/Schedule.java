@@ -1,6 +1,7 @@
 package de.pascalwagler.edimaxsmartplug.smartplug;
 
 import java.time.LocalTime;
+
 import org.w3c.dom.Document;
 
 import de.pascalwagler.edimaxsmartplug.entities.ScheduleDay;

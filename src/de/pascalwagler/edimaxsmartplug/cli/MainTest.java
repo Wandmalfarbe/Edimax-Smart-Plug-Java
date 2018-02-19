@@ -1,12 +1,10 @@
 package de.pascalwagler.edimaxsmartplug.cli;
 
 import java.net.MalformedURLException;
-import java.time.LocalDateTime;
 
 import de.pascalwagler.edimaxsmartplug.entities.PlugCredentials;
 import de.pascalwagler.edimaxsmartplug.entities.SystemInformation;
 import de.pascalwagler.edimaxsmartplug.smartplug.LocalHTTPConnection;
-import de.pascalwagler.edimaxsmartplug.smartplug.LocalSocketConnection;
 import de.pascalwagler.edimaxsmartplug.smartplug.PlugConnection;
 import de.pascalwagler.edimaxsmartplug.smartplug.SmartPlug;
 
