@@ -1,5 +1,9 @@
 <img src="icon.png" align="right" height="110"/>
 
+> [!CAUTION]  
+> This repository reached end-of-life since I no longer own a working SP-2101W smart plug.
+
+
 # EdimaxSmartPlugJava
 
 A Java library for controlling the Edimax Smart Plug SP-1101W and SP-2101W.
